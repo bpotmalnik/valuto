@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static Page<void> page() => const MaterialPage<void>(child: HomePage());
+
   @override
   Widget build(BuildContext context) {
     return const HomeView();
@@ -34,19 +36,32 @@ class HomeView extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text(
               'Overview',
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 40,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const AccountsCard(),
-            const AccountsCard(),
+            AccountsCard(),
+            GoalsCard(),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Overview',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.traffic),
+            label: 'Transactions',
+          ),
+        ],
+        onTap: (index) {},
       ),
     );
   }
@@ -58,28 +73,15 @@ class AccountsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.width * 0.5,
-      margin: EdgeInsets.only(
-        top: MediaQuery.of(context).size.width * 0.05,
-      ),
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
-        ),
-      ),
+    return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Accounts',
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -88,10 +90,10 @@ class AccountsCard extends StatelessWidget {
                 ),
               ),
               TextButton(
-                child: Text(
+                child: const Text(
                   'View all',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -105,7 +107,6 @@ class AccountsCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    child: Icon(Icons.list_alt, color: Colors.white, size: 50),
                     padding: const EdgeInsets.symmetric(
                       vertical: 1,
                       horizontal: 8,
@@ -116,10 +117,15 @@ class AccountsCard extends StatelessWidget {
                         Radius.circular(10),
                       ),
                     ),
+                    child: const Icon(
+                      Icons.list_alt,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: const Text(
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
                       'Checkings',
                       style: TextStyle(
                         fontSize: 17,
@@ -139,10 +145,7 @@ class AccountsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                child: Text('Add Account'),
                 style: ButtonStyle(
-                  backgroundColor: Colors.grey,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
@@ -150,11 +153,97 @@ class AccountsCard extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {},
+                child: const Text('Add Account'),
               ),
             ],
           )
         ],
       ),
+    );
+  }
+}
+
+@visibleForTesting
+class GoalsCard extends StatelessWidget {
+  const GoalsCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Smart Goals',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 40, left: 20),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      '1 goal'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pink,
+                      ),
+                    ),
+                    const Text(
+                      'In progress',
+                      style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Card extends StatelessWidget {
+  const Card({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.width * 0.5,
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).size.width * 0.05,
+      ),
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15),
+        ),
+      ),
+      child: child,
     );
   }
 }
