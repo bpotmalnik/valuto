@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuto/user_accounts/user_accounts.dart';
 import 'package:valuto/user_transactions/user_transactions.dart';
 
 class HomePage extends StatelessWidget {
@@ -109,7 +110,9 @@ class AccountsCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(UserAccountsPage.route());
+                },
               ),
             ],
           ),
