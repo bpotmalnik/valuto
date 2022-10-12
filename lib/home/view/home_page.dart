@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:valuto/user_transactions/user_transactions.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  static Page<void> page() => const MaterialPage<void>(child: HomePage());
+  static Route<void> route() => MaterialPageRoute<void>(
+        builder: (_) => const HomePage(),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class HomeView extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Overview',
@@ -61,7 +64,16 @@ class HomeView extends StatelessWidget {
             label: 'Transactions',
           ),
         ],
-        onTap: (index) {},
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.of(context).push(HomePage.route());
+              break;
+            case 1:
+              Navigator.of(context).push(UserTransactionsPage.route());
+              break;
+          }
+        },
       ),
     );
   }
@@ -177,8 +189,8 @@ class GoalsCard extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 'Smart Goals',
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -196,7 +208,7 @@ class GoalsCard extends StatelessWidget {
                   children: [
                     Text(
                       '1 goal'.toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Colors.pink,
