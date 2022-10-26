@@ -15,7 +15,7 @@ class GetAccountsSerializationFailure implements Exception {}
 class AccountsResource { 
   /// {@macro accounts_resource} 
   AccountsResource({http.Client? httpClient})
-          : _httpClient = httpClient ?? http.Client();
+    : _httpClient = httpClient ?? http.Client();
 
   static const _baseUrl = 'valuto-api.test';
 
