@@ -9,16 +9,16 @@ part 'user_accounts_state.dart';
 class UserAccountsBloc extends Bloc<UserAccountsEvent, UserAccountsState> {
   UserAccountsBloc({
     required AccountsRepository accountsRepository,
-  }) : _accountsRepository = accountsRepository,
-    super(const UserAccountsState()){
-      on<UserAccountsRequested>(_getAccounts);
-    }
+  })  : _accountsRepository = accountsRepository,
+        super(const UserAccountsState()) {
+    on<UserAccountsRequested>(_getAccounts);
+  }
 
   final AccountsRepository _accountsRepository;
 
   Future<void> _getAccounts(
-      UserAccountsRequested event,
-      Emitter<dynamic> emit,
+    UserAccountsRequested event,
+    Emitter<dynamic> emit,
   ) async {
     emit(state.copyWith(status: UserAccountsStatus.loading));
 
