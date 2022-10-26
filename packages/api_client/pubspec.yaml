@@ -8,8 +8,11 @@ environment:
   flutter: 3.3.3
 
 dependencies:
+  api_models:
+    path: ../api_models
   flutter:
     sdk: flutter
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
