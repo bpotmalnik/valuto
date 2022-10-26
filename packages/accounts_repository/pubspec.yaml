@@ -1,0 +1,22 @@
+name: accounts_repository
+description: Accounts Repository
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: 3.3.3
+
+dependencies:
+  api_client: 
+    path: ../api_client
+  api_models: 
+    path: ../api_models
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0
