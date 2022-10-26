@@ -1,11 +1,6 @@
-// Copyright (c) 2022, Very Good Ventures
-// https://verygood.ventures
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
-// https://opensource.org/licenses/MIT.
-
 /// API client
 library api_client;
 
 export 'src/api_client.dart';
+export 'src/resources/accounts_resource.dart';
+export 'src/resources/transactions_resource.dart';
