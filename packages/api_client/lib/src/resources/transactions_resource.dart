@@ -40,7 +40,7 @@ class TransactionsResource {
         return Transaction.fromJson(transaction as Map<String, dynamic>);
       }).toList();
     } catch (_) {
-      throw GetTransactionsRequestFailure();
+      throw GetTransactionsSerializationFailure();
     }
   }
 }
