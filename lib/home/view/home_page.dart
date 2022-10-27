@@ -191,11 +191,11 @@ class AccountTile extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: Colors.cyan,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                    Radius.circular(20),
                   ),
                 ),
                 child: const Icon(
-                  Icons.list_alt,
+                  Icons.account_balance_wallet,
                   color: Colors.white,
                   size: 40,
                 ),
@@ -212,9 +212,9 @@ class AccountTile extends StatelessWidget {
               ),
             ],
           ),
-          const Text(
-            '£1,130.00',
-            style: TextStyle(fontSize: 17),
+          Text(
+            '£${account.balance}',
+            style: const TextStyle(fontSize: 17),
           ),
         ],
       ),
@@ -302,7 +302,6 @@ class Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.width * 0.7,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.width * 0.05,
       ),
