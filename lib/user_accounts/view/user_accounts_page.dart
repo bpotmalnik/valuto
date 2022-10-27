@@ -1,5 +1,10 @@
+import 'package:accounts_repository/accounts_repository.dart';
+import 'package:api_models/api_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valuto/home/view/home_page.dart';
+import 'package:valuto/user_accounts/user_accounts.dart';
 
 class UserAccountsPage extends StatelessWidget {
   const UserAccountsPage({super.key});
@@ -10,7 +15,12 @@ class UserAccountsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const UserAccountsView();
+    return BlocProvider(
+      create: (context) => UserAccountsBloc(
+        accountsRepository: context.read<AccountsRepository>(),
+      )..add(UserAccountsRequested()),
+      child: const UserAccountsView(),
+    );
   }
 }
 
@@ -45,14 +55,21 @@ class UserAccountsView extends StatelessWidget {
               ),
             ),
             Card(
-              child: ListView.builder(
-                itemCount: 15,
-                itemBuilder: (BuildContext context, int index) {
-                  final String transactionNumber = (index + 1).toString();
-
-                  return ListTile(
-                    leading: Icon(Icons.currency_pound),
-                    title: Text('Account'),
+              child: BlocBuilder<UserAccountsBloc, UserAccountsState>(
+                builder: (context, state) {
+                  if (state.accounts.isEmpty) {
+                    if (state.status == UserAccountsStatus.loading) {
+                      return const LoadingAccountsList();
+                    } else {
+                      return const Text('No accounts available');
+                    }
+                  }
+                  return ListView.builder(
+                    itemBuilder: (BuildContext context, index) {
+                      return AccountTile(account: state.accounts[index]);
+                    },
+                    itemCount: state.accounts.length,
+                    shrinkWrap: true,
                   );
                 },
               ),
@@ -86,6 +103,23 @@ class UserAccountsView extends StatelessWidget {
   }
 }
 
+class AccountTile extends StatelessWidget {
+  const AccountTile({
+    super.key,
+    required this.account,
+  });
+
+  final Account account;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(account.name),
+      trailing: Text('£${account.balance}'),
+    );
+  }
+}
+
 class Card extends StatelessWidget {
   const Card({
     super.key,
@@ -98,7 +132,6 @@ class Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.70,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.width * 0.05,
       ),
@@ -110,6 +143,17 @@ class Card extends StatelessWidget {
         ),
       ),
       child: child,
+    );
+  }
+}
+
+class LoadingAccountsList extends StatelessWidget {
+  const LoadingAccountsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CupertinoActivityIndicator(),
     );
   }
 }
