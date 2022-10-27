@@ -24,7 +24,7 @@ class Transaction extends Equatable {
   @JsonKey(name: 'id')
   final String id;
 
-  /// Id of account that owns the transction
+  /// Id of account that owns the transaction
   @JsonKey(name: 'account_id')
   final String accountId;
 
