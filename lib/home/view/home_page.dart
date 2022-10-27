@@ -49,8 +49,8 @@ class HomeView extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
+          children: [
+            const Text(
               'Overview',
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -58,8 +58,8 @@ class HomeView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            AccountsCard(),
-            GoalsCard(),
+            const AccountsCard(),
+            const GoalsCard(),
           ],
         ),
       ),
@@ -125,27 +125,23 @@ class AccountsCard extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocBuilder<UserAccountsBloc, UserAccountsState>(
-              builder: (context, state) {
-                print(state.accounts.isEmpty);
-                if (state.accounts.isEmpty) {
-                  if (state.status == UserAccountsStatus.loading) {
-                    return const LoadingAccountsList();
-                  } else {
-                    return const Text('No accounts available');
-                  }
+          BlocBuilder<UserAccountsBloc, UserAccountsState>(
+            builder: (context, state) {
+              if (state.accounts.isEmpty) {
+                if (state.status == UserAccountsStatus.loading) {
+                  return const LoadingAccountsList();
+                } else {
+                  return const Text('No accounts available');
                 }
-
-                return ListView.builder(
-                  itemBuilder: (BuildContext context, index) {
-                    return AccountTile(account: state.accounts[index]);
-                  },
-                  itemCount: state.accounts.length,
-                );
-              },
-            ),
+              }
+              return ListView.builder(
+                itemBuilder: (BuildContext context, index) {
+                  return AccountTile(account: state.accounts[index]);
+                },
+                itemCount: 3,
+                shrinkWrap: true,
+              );
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -180,45 +176,48 @@ class AccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 1,
-                horizontal: 8,
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.cyan,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 1,
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.cyan,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.list_alt,
+                  color: Colors.white,
+                  size: 40,
                 ),
               ),
-              child: const Icon(
-                Icons.list_alt,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                account.name,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  account.name,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const Text(
-          '£1,130.00',
-          style: TextStyle(fontSize: 17),
-        ),
-      ],
+            ],
+          ),
+          const Text(
+            '£1,130.00',
+            style: TextStyle(fontSize: 17),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -303,7 +302,7 @@ class Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.7,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.width * 0.05,
       ),
