@@ -12,6 +12,7 @@ class Account extends Equatable {
   const Account({
     required this.id,
     required this.name,
+    required this.balance,
   });
 
   /// Constructs a [Account] from a JSON object.
@@ -25,6 +26,10 @@ class Account extends Equatable {
   /// Name of the account
   @JsonKey(name: 'name')
   final String name;
+
+  /// Balance of the account
+  @JsonKey(name: 'balance')
+  final double balance;
 
   /// Returns a JSON object representing this [Account]
   Map<String, dynamic> toJson() => _$AccountToJson(this);
