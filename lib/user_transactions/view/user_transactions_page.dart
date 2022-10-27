@@ -1,5 +1,9 @@
+import 'package:api_models/api_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transactions_repository/transactions_repository.dart';
 import 'package:valuto/home/view/home_page.dart';
+import 'package:valuto/user_transactions/user_transactions.dart';
 
 class UserTransactionsPage extends StatelessWidget {
   const UserTransactionsPage({super.key});
@@ -10,7 +14,12 @@ class UserTransactionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const UserTransactionView();
+    return BlocProvider(
+      create: (context) => UserTransactionsBloc(
+        transactionsRepository: context.read<TransactionsRepository>(),
+      )..add(UserTransactionsRequested()),
+      child: const UserTransactionView(),
+    );
   }
 }
 
@@ -42,14 +51,23 @@ class UserTransactionView extends StatelessWidget {
               ),
             ),
             Card(
-              child: ListView.builder(
-                itemCount: 15,
-                itemBuilder: (BuildContext context, int index) {
-                  final String transactionNumber = (index + 1).toString();
+              child: BlocBuilder<UserTransactionsBloc, UserTransactionsState>(
+                builder: (context, state) {
+                  if (state.transactions.isEmpty) {
+                    if (state.status == UserTransactionsStatus.loading) {
+                      return const LoadingAccountsList();
+                    } else {
+                      return const Text('No transactions available');
+                    }
+                  }
 
-                  return ListTile(
-                    leading: Icon(Icons.currency_pound),
-                    title: Text('#$transactionNumber spending'),
+                  return ListView.builder(
+                    itemBuilder: (BuildContext context, index) {
+                      return TransactionTile(
+                          account: state.transactions[index]);
+                    },
+                    itemCount: state.transactions.length,
+                    shrinkWrap: true,
                   );
                 },
               ),
@@ -85,6 +103,22 @@ class UserTransactionView extends StatelessWidget {
   }
 }
 
+class TransactionTile extends StatelessWidget {
+  const TransactionTile({
+    super.key,
+    required this.account,
+  });
+
+  final Transaction account;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(account.name),
+    );
+  }
+}
+
 class Card extends StatelessWidget {
   const Card({
     super.key,
@@ -96,8 +130,8 @@ class Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.68,
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.70,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.width * 0.05,
       ),
