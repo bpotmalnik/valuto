@@ -38,5 +38,6 @@ class Account extends Equatable {
   List<Object> get props => [
         id,
         name,
+        balance,
       ];
 }
