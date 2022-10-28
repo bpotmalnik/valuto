@@ -11,6 +11,7 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
       accountId: json['account_id'] as String,
       name: json['name'] as String,
       amount: (json['amount'] as num).toDouble(),
+      account: Account.fromJson(json['account'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'account_id': instance.accountId,
       'name': instance.name,
       'amount': instance.amount,
+      'account': instance.account,
     };
