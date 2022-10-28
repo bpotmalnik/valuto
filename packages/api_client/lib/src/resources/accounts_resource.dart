@@ -7,38 +7,39 @@ import 'package:http/http.dart' as http;
 class GetAccountsRequestFailure implements Exception {}
 
 /// Exception thrown when there was a problem with mapping
-class GetAccountsSerializationFailure implements Exception {} 
+class GetAccountsSerializationFailure implements Exception {}
 
 /// {@template accounts_resource}
 /// API Resource for [Account]
 /// {@endtemplate}
-class AccountsResource { 
-  /// {@macro accounts_resource} 
+class AccountsResource {
+  /// {@macro accounts_resource}
   AccountsResource({http.Client? httpClient})
-    : _httpClient = httpClient ?? http.Client();
+      : _httpClient = httpClient ?? http.Client();
 
-  static const _baseUrl = 'valuto-api.test';
+  static const _baseUrl = 'valuto-api.test:82';
 
   final http.Client _httpClient;
-  
+
   /// Fetch list of [Account] from api
   Future<List<Account>> getAccounts() async {
     final response = await _httpClient.get(
-        Uri.https(_baseUrl, 'api/accounts'),
+      Uri.http(_baseUrl, 'api/accounts'),
     );
 
-    if(response.statusCode != 200){
-        throw GetAccountsRequestFailure();
+    if (response.statusCode != 200) {
+      throw GetAccountsRequestFailure();
     }
 
     try {
-        final accountsJson = jsonDecode(response.body) as List<dynamic>;
+      final accountsJson = jsonDecode(response.body) as Map<String, dynamic>;
+      final accounts = accountsJson['data'] as List<dynamic>;
 
-        return accountsJson.map((account) {
-            return Account.fromJson(account as Map<String,dynamic>);
-        }).toList();
+      return accounts.map((account) {
+        return Account.fromJson(account as Map<String, dynamic>);
+      }).toList();
     } catch (_) {
-        throw GetAccountsRequestFailure();
+      throw GetAccountsSerializationFailure();
     }
   }
 }

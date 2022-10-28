@@ -7,38 +7,40 @@ import 'package:http/http.dart' as http;
 class GetTransactionsRequestFailure implements Exception {}
 
 /// Exception thrown when there was a problem with getTransactions mapping
-class GetTransactionsSerializationFailure implements Exception {} 
+class GetTransactionsSerializationFailure implements Exception {}
 
 /// {@template transactions_resource}
 /// API Resource for [Transaction]
 /// {@endtemplate}
-class TransactionsResource { 
-  /// {@macro transactions_resource} 
+class TransactionsResource {
+  /// {@macro transactions_resource}
   TransactionsResource({http.Client? httpClient})
-          : _httpClient = httpClient ?? http.Client();
+      : _httpClient = httpClient ?? http.Client();
 
-  static const _baseUrl = 'valuto-api.test';
+  static const _baseUrl = 'valuto-api.test:82';
 
   final http.Client _httpClient;
-  
+
   /// Fetch list of [Transaction] from api
   Future<List<Transaction>> getTransactions() async {
     final response = await _httpClient.get(
-        Uri.https(_baseUrl, 'api/transactions'),
+      Uri.http(_baseUrl, 'api/transactions'),
     );
 
-    if(response.statusCode != 200){
-        throw GetTransactionsRequestFailure();
+    if (response.statusCode != 200) {
+      throw GetTransactionsRequestFailure();
     }
 
     try {
-        final transactionJson = jsonDecode(response.body) as List<dynamic>;
+      final transactionJson = jsonDecode(response.body) as Map<String, dynamic>;
 
-        return transactionJson.map((transaction) {
-            return Transaction.fromJson(transaction as Map<String,dynamic>);
-        }).toList();
+      final transactions = transactionJson['data'] as List<dynamic>;
+
+      return transactions.map((transaction) {
+        return Transaction.fromJson(transaction as Map<String, dynamic>);
+      }).toList();
     } catch (_) {
-        throw GetTransactionsRequestFailure();
+      throw GetTransactionsSerializationFailure();
     }
   }
 }

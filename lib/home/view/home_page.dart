@@ -1,4 +1,9 @@
+import 'package:accounts_repository/accounts_repository.dart';
+import 'package:api_models/api_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:valuto/home/home.dart';
 import 'package:valuto/user_accounts/user_accounts.dart';
 import 'package:valuto/user_transactions/user_transactions.dart';
 
@@ -11,7 +16,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeView();
+    return BlocProvider(
+      create: (context) => HomeBloc(
+        accountsRepository: context.read<AccountsRepository>(),
+      )..add(HomeDataRequested()),
+      child: const HomeView(),
+    );
   }
 }
 
@@ -116,45 +126,23 @@ class AccountsCard extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 1,
-                      horizontal: 8,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: Colors.cyan,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.list_alt,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Checkings',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Text(
-                '£1,130.00',
-                style: TextStyle(fontSize: 17),
-              ),
-            ],
+          BlocBuilder<HomeBloc, HomeBlocState>(
+            builder: (context, state) {
+              if (state.accounts.isEmpty) {
+                if (state.status == UserAccountsStatus.loading) {
+                  return const LoadingAccountsList();
+                } else {
+                  return const Text('No accounts available');
+                }
+              }
+              return ListView.builder(
+                itemBuilder: (BuildContext context, index) {
+                  return AccountTile(account: state.accounts[index]);
+                },
+                itemCount: 3,
+                shrinkWrap: true,
+              );
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -172,6 +160,63 @@ class AccountsCard extends StatelessWidget {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+}
+
+@visibleForTesting
+class AccountTile extends StatelessWidget {
+  const AccountTile({
+    required this.account,
+    super.key,
+  });
+
+  final Account account;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 1,
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.cyan,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  account.name,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Text(
+            '£${account.balance}',
+            style: const TextStyle(fontSize: 17),
+          ),
         ],
       ),
     );
@@ -235,6 +280,17 @@ class GoalsCard extends StatelessWidget {
   }
 }
 
+class LoadingAccountsList extends StatelessWidget {
+  const LoadingAccountsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CupertinoActivityIndicator(),
+    );
+  }
+}
+
 class Card extends StatelessWidget {
   const Card({
     super.key,
@@ -247,7 +303,6 @@ class Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.width * 0.5,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.width * 0.05,
       ),

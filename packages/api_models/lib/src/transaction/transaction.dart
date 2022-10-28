@@ -1,3 +1,4 @@
+import 'package:api_models/api_models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -14,6 +15,7 @@ class Transaction extends Equatable {
     required this.accountId,
     required this.name,
     required this.amount,
+    required this.account,
   });
 
   /// Constructs a [Transaction] from a JSON object.
@@ -24,7 +26,7 @@ class Transaction extends Equatable {
   @JsonKey(name: 'id')
   final String id;
 
-  /// Id of account that owns the transction
+  /// Id of account that owns the transaction
   @JsonKey(name: 'account_id')
   final String accountId;
 
@@ -36,11 +38,15 @@ class Transaction extends Equatable {
   @JsonKey(name: 'amount')
   final double amount;
 
+  /// Account associated with the transaction
+  @JsonKey(name: 'account')
+  final Account account;
   @override
   List<Object> get props => [
         id,
         accountId,
         name,
         amount,
+        account,
       ];
 }

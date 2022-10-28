@@ -8,13 +8,22 @@ environment:
   flutter: 3.3.4
 
 dependencies:
+  accounts_repository: 
+    path: packages/accounts_repository
+  api_client: 
+    path: packages/api_client
+  api_models: 
+    path: packages/api_models
   bloc: ^8.1.0
+  equatable: ^2.0.5 
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  transactions_repository:
+    path: packages/transactions_repository
 
 dev_dependencies:
   bloc_test: ^9.1.0
