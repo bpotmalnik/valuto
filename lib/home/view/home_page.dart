@@ -3,6 +3,7 @@ import 'package:api_models/api_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:valuto/home/home.dart';
 import 'package:valuto/user_accounts/user_accounts.dart';
 import 'package:valuto/user_transactions/user_transactions.dart';
 
@@ -16,9 +17,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserAccountsBloc(
+      create: (context) => HomeBloc(
         accountsRepository: context.read<AccountsRepository>(),
-      )..add(UserAccountsRequested()),
+      )..add(HomeDataRequested()),
       child: const HomeView(),
     );
   }
@@ -49,8 +50,8 @@ class HomeView extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
+          children: const [
+            Text(
               'Overview',
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -58,8 +59,8 @@ class HomeView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const AccountsCard(),
-            const GoalsCard(),
+            AccountsCard(),
+            GoalsCard(),
           ],
         ),
       ),
@@ -125,7 +126,7 @@ class AccountsCard extends StatelessWidget {
               ),
             ],
           ),
-          BlocBuilder<UserAccountsBloc, UserAccountsState>(
+          BlocBuilder<HomeBloc, HomeBlocState>(
             builder: (context, state) {
               if (state.accounts.isEmpty) {
                 if (state.status == UserAccountsStatus.loading) {
