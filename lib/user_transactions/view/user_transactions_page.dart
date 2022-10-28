@@ -64,7 +64,8 @@ class UserTransactionView extends StatelessWidget {
                   return ListView.builder(
                     itemBuilder: (BuildContext context, index) {
                       return TransactionTile(
-                          account: state.transactions[index]);
+                        transaction: state.transactions[index],
+                      );
                     },
                     itemCount: state.transactions.length,
                     shrinkWrap: true,
@@ -106,15 +107,18 @@ class UserTransactionView extends StatelessWidget {
 class TransactionTile extends StatelessWidget {
   const TransactionTile({
     super.key,
-    required this.account,
+    required this.transaction,
   });
 
-  final Transaction account;
+  final Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(account.name),
+      title: Text(transaction.name),
+      subtitle: Text(
+        transaction.account.name,
+      ),
     );
   }
 }
