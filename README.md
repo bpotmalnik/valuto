@@ -2,6 +2,9 @@
 
 App to track your dolla
 
+Backend: [valuto-api](https://github.com/bpotmalnik/valuto-api)
+
+## WIP
 ---
 
 ## Getting Started 🚀
