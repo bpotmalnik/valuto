@@ -1,12 +1,25 @@
 # Valuto
 
-App to track your dolla
+## WIP
+
+Flutter app that works like your bank app.
 
 Backend: [valuto-api](https://github.com/bpotmalnik/valuto-api)
 
-## WIP
----
+Currently supported: 
+- displaying accounts 
+- displaying transactions 
 
+<p float="left">
+  <img height="500" alt="Home Page" src="https://user-images.githubusercontent.com/20015942/201359302-64e69f51-865c-48bb-a75a-6b13a99b2847.png">
+  <img height="500" alt="Accounts Page" src="https://user-images.githubusercontent.com/20015942/201359535-32de2550-d13c-4440-b789-6b91577f743b.png">
+  <img height="500" alt="Transactions" src="https://user-images.githubusercontent.com/20015942/201359785-27dde5df-677c-4c5b-afdf-0109c9458e03.png">
+</p>
+
+Design:
+- [Screenlane MoneyCoach](https://screenlane.com/screen/moneycoach-ios-app-b9f/)
+
+---
 ## Getting Started 🚀
 
 This project contains 3 flavors:
